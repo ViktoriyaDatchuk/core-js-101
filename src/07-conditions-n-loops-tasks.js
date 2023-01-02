@@ -340,8 +340,30 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const stek = [];
+  const bracket = {
+    ']': '[',
+    ')': '(',
+    '}': '{',
+    '>': '<',
+  };
+
+  for (let i = 0; i < str.length; i += 1) {
+    if (str[i] in bracket) {
+      if (stek.length) {
+        if (bracket[str[i]] !== stek.pop()) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } else {
+      stek.push(str[i]);
+    }
+  }
+
+  return !stek.length;
 }
 
 
@@ -365,8 +387,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 
@@ -382,8 +404,26 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const array = pathes.map((item) => item.split('/'));
+  const last = array[array.length - 1];
+  let result = '';
+
+  for (let i = 1; i < array.length; i += 1) {
+    const current = array[i];
+    for (let j = 0; j < array[0].length; j += 1) {
+      if (current[j] === array[0][j]) {
+        if (last[j] === array[0][j]) {
+          result += `${array[0][j]}/`;
+        }
+      }
+    }
+  }
+  if (result === '//') {
+    return '/';
+  }
+
+  return result;
 }
 
 
@@ -405,8 +445,17 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const result = [];
+
+  for (let i = 0; i < m1.length; i += 1) {
+    const elem = [];
+    for (let j = 0; j < m2[i].length; j += 1) {
+      elem.push(m1[i].reduce((acc, item, index) => acc + item * m2[index][j], 0));
+    }
+    result.push(elem);
+  }
+  return result;
 }
 
 
@@ -440,8 +489,29 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  let row = '';
+  for (let i = 0; i < 3; i += 1) {
+    if (position[i][0] === position[i][1] && position[i][0] === position[i][2]) {
+      row = [position[i][0]];
+    }
+  }
+
+  let col = '';
+  for (let i = 0; i < 3; i += 1) {
+    if (position[0][i] === position[1][i] && position[0][i] === position[2][i]) {
+      col = position[0][i];
+    }
+  }
+
+  const diag = (position[0][0] === position[1][1] && position[0][0] === position[2][2])
+    || (position[2][0] === position[1][1] && position[2][0] === position[0][2])
+    ? position[1][1]
+    : undefined;
+
+  if (row && row.length) return row[0];
+  if (col && col.length) return col[0];
+  return diag;
 }
 
 
